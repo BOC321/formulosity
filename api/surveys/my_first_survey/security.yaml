@@ -1,0 +1,4 @@
+rules:
+  - allow_methods:
+      - GET
+      - POST

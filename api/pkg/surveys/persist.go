@@ -37,6 +37,9 @@ func PersistSurveysSyncResult(svc services.Services, syncResult *types.SurveysSy
 				currSurveyCopy.ParseStatus = types.SurveyParseStatus_Success
 				currSurveyCopy.ErrorLog = ""
 				currSurveyCopy.Config = surveyCopy.Config
+				// --- ADDED/MODIFIED LINE HERE ---
+				currSurveyCopy.URLSlug = surveyCopy.URLSlug // Ensure URLSlug is updated from the parsed survey
+				// --------------------------------
 
 				surveysToUpdate = append(surveysToUpdate, &currSurveyCopy)
 				isDeleted = false

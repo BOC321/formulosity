@@ -1,0 +1,15 @@
+questions:
+  - type: short-text
+    id: favorite_color
+    label: What is your favorite color?
+    description: Please enter a single color.
+
+  - type: single-choice
+    id: satisfaction_rating
+    label: How satisfied are you with this basic survey?
+    options:
+      - Very Satisfied
+      - Satisfied
+      - Neutral
+      - Dissatisfied
+      - Very Dissatisfied

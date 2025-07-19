@@ -21,7 +21,6 @@ import {
 } from 'lib/types'
 import { getSurveySessions, download, deleteSurveySession } from 'lib/api'
 import moment from 'moment'
-import { Session } from 'inspector'
 
 type SurveyResponsesPageProps = {
 	currentSurvey: Survey

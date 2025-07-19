@@ -51,8 +51,9 @@ func (p *Parser) ReadSurveys(path string) (*types.SurveysSyncResult, error) {
 			if surveyConfig != nil {
 				iterConfig := *surveyConfig
 				survey := &types.Survey{
-					Name:   item.Name(),
-					Config: &iterConfig,
+					Name:    item.Name(),
+					URLSlug: item.Name(), // <-- ADDED THIS LINE
+					Config:  &iterConfig,
 				}
 
 				surveys = append(surveys, survey)

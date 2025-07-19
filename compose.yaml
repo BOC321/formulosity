@@ -5,17 +5,19 @@ services:
       context: ./api
     ports:
       - "9900:8080"
-    depends_on:
-      - postgres
+    # depends_on: # <--- COMMENT THIS ENTIRE LINE OUT
+    #   - postgres # <--- COMMENT THIS ENTIRE LINE OUT
     environment:
-      - DATABASE_TYPE=sqlite # postgres|sqlite
-      # - DATABASE_URL=postgres://user:pass@postgres:5432/formulosity?sslmode=disable
-      - DATABASE_URL=/root/sqlite3/formulosity.db
+      - DATABASE_TYPE=postgres # postgres|sqlite
+      # Corrected DATABASE_URL: removed space after 'postgres:', URL-encoded '#' to '%23'
+      - DATABASE_URL=postgresql://postgres.rfwlmfslfgncohlcbzjc:1dT48jferVerrt4nKlPpf3e@aws-0-ap-southeast-2.pooler.supabase.com:6543/postgres?sslmode=require
+      # - DATABASE_URL=/root/sqlite3/formulosity.db # <--- This was already commented, good.
       - SURVEYS_DIR=/root/surveys
       - UPLOADS_DIR=/root/uploads
+      - WEBHOOKS_ENABLED=FALSE
     volumes:
       - ./api/surveys:/root/surveys
-      - ./api/sqlite3:/root/sqlite3
+      # - ./api/sqlite3:/root/sqlite3 # <--- COMMENT THIS LINE OUT (optional, but good cleanup)
       - ./api/uploads:/root/uploads
   ui:
     restart: always
@@ -30,14 +32,14 @@ services:
       - HTTP_BASIC_AUTH=user:pass
     depends_on:
       - api
-  postgres:
-    image: postgres:16.0-alpine
-    restart: always
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=pass
-      - POSTGRES_DB=formulosity
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./api/postgres-data:/var/lib/postgresql/data
+# postgres: # <--- COMMENT THIS ENTIRE BLOCK OUT
+#   image: postgres:16.0-alpine
+#   restart: always
+#   environment:
+#     - POSTGRES_USER=user
+#     - POSTGRES_PASSWORD=pass
+#     - POSTGRES_DB=formulosity
+#   ports:
+#     - "5432:5432"
+#   volumes:
+#     - ./api/postgres-data:/var/lib/postgresql/data

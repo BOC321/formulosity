@@ -1,0 +1,25 @@
+# fly.toml app configuration file generated for ttasurvey on <DATE>
+#
+# ... (other config lines) ...
+
+app = 'ttasurvey' # <--- CONFIRM THIS IS YOUR APP NAME
+
+# ... (primary_region, build, etc.) ...
+
+[env]
+  SURVEYS_DIR = "/root/surveys-examples"
+  DATABASE_TYPE = "postgres" # <--- ADD THIS LINE!
+  DATABASE_URL = "postgresql://postgres:1dT48jferVerrt4nKlPpf3e@db.rfwlmfslfgncohlcbzjc.supabase.co:5432/postgres?sslmode=disable" # <--- CONFIRM THIS IS CORRECT AND SECURE!
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
