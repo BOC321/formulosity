@@ -92,7 +92,12 @@ func (p *Parser) ReadSurvey(path string) (*types.SurveyConfig, error) {
 		return nil, nil
 	}
 
-	surveyConfig := &types.SurveyConfig{}
+	surveyConfig := &types.SurveyConfig{
+		Questions: &types.Questions{},
+		Variables: &types.Variables{},
+		Security:  &types.Security{},
+	}
+
 	for _, surveyFile := range surveyFiles {
 		found := false
 		for _, item := range items {
@@ -120,13 +125,13 @@ func (p *Parser) ReadSurvey(path string) (*types.SurveyConfig, error) {
 			var fileParseErr error
 			switch surveyFile.Name {
 			case surveyFileType_Metadata:
-				fileParseErr = yaml.Unmarshal(file, &surveyConfig)
+				fileParseErr = yaml.Unmarshal(file, surveyConfig)
 			case surveyFileType_Questions:
-				fileParseErr = yaml.Unmarshal(file, &surveyConfig.Questions)
+				fileParseErr = yaml.Unmarshal(file, surveyConfig.Questions)
 			case surveyFileType_Security:
-				fileParseErr = yaml.Unmarshal(file, &surveyConfig.Security)
+				fileParseErr = yaml.Unmarshal(file, surveyConfig.Security)
 			case surveyFileType_Variables:
-				fileParseErr = yaml.Unmarshal(file, &surveyConfig.Variables)
+				fileParseErr = yaml.Unmarshal(file, surveyConfig.Variables)
 			}
 			if fileParseErr != nil {
 				return nil, fmt.Errorf("unable to parse file '%s': %w", surveyFile.Name, fileParseErr)

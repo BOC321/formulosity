@@ -19,6 +19,14 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v7
         with:
@@ -36,9 +44,25 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
       - name: Run Tests
         working-directory: ./api
-        run: go test -v -bench=. -race ./...
+        run: go test -v -bench=. -race -coverprofile=coverage.out -covermode=atomic ./...
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: TTA-Based-Survey/formulosity
+          files: ./api/coverage.out
+          verbose: true
 
   lint-ui:
     name: Lint UI
@@ -46,18 +70,50 @@ jobs:
     strategy:
       matrix:
         node_version: [20]
-
     steps:
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node_version }}
+      - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node_version: ${{ matrix.node_version }}
+          node-version: ${{ matrix.node_version }}
 
-      - name: run CI
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ui/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('ui/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
         working-directory: ./ui
-        run: |
-          npm install
-          npm run lint
+        run: npm install
+
+      - name: Lint
+        working-directory: ./ui
+        run: npm run lint
+
+  test-ui:
+    name: Test UI
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node_version: [20]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node_version }}
+
+      - name: Install dependencies
+        working-directory: ./ui
+        run: npm install
+
+      - name: Build
+        working-directory: ./ui
+        run: npm run build

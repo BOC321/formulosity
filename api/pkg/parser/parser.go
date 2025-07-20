@@ -35,6 +35,10 @@ func (p *Parser) ReadSurveys(path string) (*types.SurveysSyncResult, error) {
 		return nil, fmt.Errorf("unable to read surveys directory: %w", err)
 	}
 
+	sort.Slice(items, func(i, j int) bool {
+		return items[i].Name() < items[j].Name()
+	})
+
 	for _, item := range items {
 		if item.IsDir() {
 			surveyConfig, err := p.ReadSurvey(path + item.Name())

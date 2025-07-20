@@ -28,16 +28,17 @@ func TestReadSurveys(t *testing.T) {
 	}
 	surveysCopy := resultCopy.Surveys
 
-	assert.Len(t, surveys, 4)
-	assert.Equal(t, "simple", surveys[3].Name)
+
+	assert.Len(t, surveys, 5)
+	assert.Equal(t, "short", surveys[3].Name)
 
 	surveyConfig := surveys[3].Config
 	surveyConfigCopy := surveysCopy[3].Config
 
 	assert.Len(t, surveyConfig.Hash, 64)
-	assert.Len(t, surveyConfig.Questions.Questions, 9)
-	assert.Len(t, surveyConfig.Variables.Variables, 1)
-	assert.Equal(t, "Survey Title", surveyConfig.Title)
+	assert.Len(t, surveyConfig.Questions.Questions, 1)
+	assert.Len(t, surveyConfig.Variables.Variables, 0)
+	assert.Equal(t, "Short Title", surveyConfig.Title)
 	assert.Equal(t, types.Theme_Default, surveyConfig.Theme)
 	assert.Equal(t, surveyConfig.Hash, surveyConfigCopy.Hash)
 
