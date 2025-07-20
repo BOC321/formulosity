@@ -4,12 +4,15 @@
 
 app = 'ttasurvey' # <--- CONFIRM THIS IS YOUR APP NAME
 
+[build]
+dockerfile = "Dockerfile"
+
 # ... (primary_region, build, etc.) ...
 
 [env]
   SURVEYS_DIR = "/root/surveys-examples"
   DATABASE_TYPE = "postgres" # <--- ADD THIS LINE!
-  DATABASE_URL = "postgresql://postgres:1dT48jferVerrt4nKlPpf3e@db.rfwlmfslfgncohlcbzjc.supabase.co:5432/postgres?sslmode=disable" # <--- CONFIRM THIS IS CORRECT AND SECURE!
+  DATABASE_URL = "postgresql://postgres:1dT48jferVerrt4nKlPpf3e@db.rfwlmfslfgncohlcbzjc.supabase.co:5432/postgres?sslmode=require" # <--- CONFIRM THIS IS CORRECT AND SECURE!
 
 [http_service]
   internal_port = 8080
